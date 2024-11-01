@@ -4,11 +4,7 @@ import { getAuth, signOut } from 'firebase/auth';
 import {Link} from 'react-router-dom'
 import {collection,getDocs,deleteDoc,doc} from 'firebase/firestore'
 import {db} from '../firebaseConfig'
-import Swal from 'sweetalert2'
-import withReactContent from 'sweetalert2-react-content'
 
-
-const MySwal = withReactContent(Swal);
 const auth = getAuth(appFirebase);
 
 const Home =()=>{
