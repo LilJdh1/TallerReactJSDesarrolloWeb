@@ -1,53 +1,51 @@
 import React, { useState } from 'react'
-
 import appFirebase from '../firebaseConfig';
-import { getAuth, createUserWithEmailAndPassword, signInWithCredential, signInWithEmailAndPassword } from 'firebase/auth';
+import { getAuth,signInWithEmailAndPassword } from 'firebase/auth';
+import {Link} from 'react-router-dom'
 
-const auth = getAuth(appFirebase);
 
 const Login = () => {
-    const[registrando, setRegistrando] = useState(false);
-    const functAutentication = async(e) =>{
+    const[email, setEmail] = useState()
+    const[contraseña,setContraseña] = useState()
+    const auth = getAuth();
+
+    const login = async(e) =>{
         e.preventDefault();
-        const correo = e.target.email.value;
-        const contraseña = e.target.password.value;
-        if(registrando){
-            try {
-                await createUserWithEmailAndPassword(auth, correo, contraseña)
-            } catch (error) {
-                alert("Asegurese que la contraseña tenga mas de 8 caracteres")
-            }
-            
-        }else{
-            try {
-                await signInWithEmailAndPassword(auth, correo, contraseña)
-            } catch (error) {
-                alert("El correo y/o Contraseña son incorrectos")
-            }
-            
+        try {
+            await signInWithEmailAndPassword(auth, email, contraseña)
+        } catch (error) {
+            console.log(error)
         }
-    }   
+    }
   return (
     <div className='container'>
-      <h2 className='text-center '>Inicia sesion en tu cuenta</h2>
-      <div className='row'>
-        
-        <div className='col-md-4'>
-            <div className='padre'>
-                <div className='card card-body  shadow-lg'>
-                    <form onSubmit={functAutentication}>
-                        <input type='text' placeholder='Ingresar email' className='cajatexto' id='email'/>
-                        <input type='password' placeholder='Ingresar contraseña' className='cajatexto' id='password'/>
-                        <button className='btnform'>{registrando ? "Registrate" : "Inicia Sesion"}</button>
-                    </form>
-                    <h4 className='texto'>{registrando ? "Si ya tienes cuenta" : "No tienes cuenta"}<button className='btnswitch' onClick={()=>setRegistrando(!registrando)}>{registrando ? "Inicia sesion" : "Registrate"}</button></h4>
+    <div className='row'>
+        <div className='col'>
+            <h1>Iniciar Sesión</h1>
+            <form onSubmit={login}>
+                <div className='mb-3'>
+                    <label className='form-label'>Correo Electrónico</label>
+                    <input
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        type="email"
+                        className='form-control'
+                    />
                 </div>
+                <div className='mb-3'>
+                    <label className='form-label'>Contraseña</label>
+                    <input
+                        value={contraseña}
+                        onChange={(e) => setContraseña(e.target.value)}
+                        type="password"
+                        className='form-control'
+                    />
+                </div>
+                    <button type='submit' className='btn btn-primary'>Iniciar Sesión</button>
+            </form>
+                <p>¿No tienes una cuenta? <Link to="/registro">Regístrate</Link></p>
             </div>
         </div>
-        <div className='col-md-8'>
-
-        </div>
-      </div>
     </div>
   )
 }
